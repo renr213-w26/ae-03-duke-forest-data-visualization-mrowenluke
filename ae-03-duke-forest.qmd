@@ -23,10 +23,10 @@ Luckily, you can help them answer this question with data visualization!
 
 ```{r}
 #| label: garage
-#| eval: false
+#| eval: true
 
-duke_forest |>
-  mutate(garage = if_else(str_detect(parking, "Garage"),   "Garage", "No garage"))
+duke_forest <- duke_forest |>
+  mutate(garage = if_else(str_detect(parking, "Garage"), "Garage", "No garage"))
 ```
 
 -   Then, facet by `garage` and use different colors for the two facets.
@@ -37,10 +37,19 @@ duke_forest |>
 ```{r}
 #| label: price-garage
 
-# add code here
+duke_forest |>
+  ggplot(aes(x = price, fill = garage)) +
+  geom_histogram(binwidth = 50000, show.legend = FALSE) +
+  facet_wrap(~ garage) +
+  labs(
+    title = "Distribution of House Prices by Garage Availability",
+    x = "Price (USD)",
+    y = "Count"
+  ) +
+  theme_minimal()
 ```
 
-Add narrative here...
+Houses with garages tend to have higher prices overall compared to those without garages, as indicated by the distribution shifting toward higher values. The spread of prices for houses with garages also appears wider, suggesting more variability in higher-priced homes. This suggests that having a garage is associated with higher home prices, although it may also reflect other features correlated with garages.
 
 ::: callout-important
 Now is a good time to render, commit, and push.
@@ -67,10 +76,30 @@ Once again, data visualization skills to the rescue!
 ```{r}
 #| label: price-area
 
-# add code here
+duke_forest |>
+  ggplot(aes(x = area, y = price, color = year_built)) +
+  geom_point() +
+  geom_smooth(se = FALSE) +
+  labs(
+    title = "House Price vs Area Colored by Year Built",
+    x = "Area (square feet)",
+    y = "Price (USD)",
+    color = "Year Built"
+  ) +
+  theme_minimal()
 ```
 
-Add narrative here...
+Claim 1: Larger houses are priced higher
+
+There is a clear positive relationship between area and price, with larger houses generally having higher prices. The upward trend in the scatterplot and smooth line supports this claim.
+
+Claim 2: Newer houses are priced higher
+
+Newer houses (indicated by color) tend to cluster toward higher prices, although there is some overlap with older homes. This suggests that newer houses are often more expensive, but the relationship is not perfectly consistent.
+
+Claim 3: Bigger and more expensive houses tend to be newer
+
+Larger and more expensive houses often appear to be newer, as indicated by their color distribution in the upper-right portion of the plot. However, there are exceptions, suggesting that while the trend exists, it is not absolute.
 
 ::: callout-important
 Now is a good time to render, commit, and push.
